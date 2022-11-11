@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+    <persistence-unit name="default">
+        <class>simplone.example.simplonecloneui.admin.Admin</class>
+        <class>simplone.example.simplonecloneui.breif.Breif</class>
+        <class>simplone.example.simplonecloneui.former.Former</class>
+        <class>simplone.example.simplonecloneui.learner.Learner</class>
+        <class>simplone.example.simplonecloneui.promotion.Promotion</class>
+        <properties>
+            <property name='hibernate.connection.driver_class' value="org.postgresql.Driver">org.postgresql.Driver</property>
+            <property name='hibernate.connection.url' value="jdbc:postgresql://localhost:5433/simploneUI">jdbc:postgresql://localhost:5433/simploneUI</property>
+            <property name='hibernate.connection.username' value="postgres">postgres</property>
+            <property name='hibernate.connection.password' value="admin">admin</property>
+            <property name="show_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+        </properties>
+    </persistence-unit>
+</persistence>
