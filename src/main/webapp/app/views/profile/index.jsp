@@ -210,7 +210,7 @@
     }
   }
   // get all info admin
-  getAdmin()
+  // getAdmin()
   function getAdmin(){
 
     $.ajax({

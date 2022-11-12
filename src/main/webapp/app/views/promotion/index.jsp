@@ -68,7 +68,7 @@
   $("#loadingUpdate").hide()
   $("#loadingNotes").hide()
   // get promotion
-  getPromotion()
+  // getPromotion()
   function getPromotion() {
     $.ajax({
       url  : "/admin/promotion/get",
@@ -88,7 +88,7 @@
     })
   }
   // get all rooms
-  getAllRooms()
+  // getAllRooms()
   function getAllRooms() {
     var ulRoomsHtml = '';
     $.ajax({

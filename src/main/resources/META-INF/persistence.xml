@@ -3,18 +3,19 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
-    <persistence-unit name="default">
+    <persistence-unit name="myunit">
         <class>simplone.example.simplonecloneui.admin.Admin</class>
-        <class>simplone.example.simplonecloneui.breif.Breif</class>
-        <class>simplone.example.simplonecloneui.former.Former</class>
-        <class>simplone.example.simplonecloneui.learner.Learner</class>
-        <class>simplone.example.simplonecloneui.promotion.Promotion</class>
+        <class>simplone.example.simplonecloneui.learner.Apprenants</class>
+        <class>simplone.example.simplonecloneui.breif.Briefs</class>
+        <class>simplone.example.simplonecloneui.former.Formateurs</class>
+        <class>simplone.example.simplonecloneui.promotion.Promos</class>
+        <class>simplone.example.simplonecloneui.entity.Rendu</class>
         <properties>
-            <property name='hibernate.connection.driver_class' value="org.postgresql.Driver">org.postgresql.Driver</property>
-            <property name='hibernate.connection.url' value="jdbc:postgresql://localhost:5433/simploneUI">jdbc:postgresql://localhost:5433/simploneUI</property>
-            <property name='hibernate.connection.username' value="postgres">postgres</property>
-            <property name='hibernate.connection.password' value="admin">admin</property>
-            <property name="show_sql" value="true"/>
+            <property name='hibernate.connection.driver_class' value="org.postgresql.Driver" />
+            <property name='hibernate.connection.url' value="jdbc:postgresql://localhost:5433/simploneUI" />
+            <property name='hibernate.connection.username' value="postgres" />
+            <property name='hibernate.connection.password' value="admin" />
+            <property name="show_sql" value="false"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
         </properties>
     </persistence-unit>

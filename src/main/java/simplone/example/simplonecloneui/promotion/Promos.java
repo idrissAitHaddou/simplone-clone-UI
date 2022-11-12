@@ -1,6 +1,10 @@
-package simplone.example.simplonecloneui.entity;
+package simplone.example.simplonecloneui.promotion;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import simplone.example.simplonecloneui.breif.Briefs;
+import simplone.example.simplonecloneui.former.Formateurs;
+import simplone.example.simplonecloneui.learner.Apprenants;
+
 import java.util.Collection;
 
 @Entity
@@ -15,9 +19,22 @@ public class Promos {
     @Basic
     @Column(name = "annescolaire")
     private String annescolaire;
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @Basic
     @Column(name = "niveau")
     private String niveau;
+
+    public String getImage() {
+        return image;
+    }
+
+    @Basic
+    @Column(name = "image")
+    private String image;
     @OneToMany(mappedBy = "idpr")
     private Collection<Apprenants> apprenantsById;
     @OneToMany(mappedBy = "promosByIdpr")

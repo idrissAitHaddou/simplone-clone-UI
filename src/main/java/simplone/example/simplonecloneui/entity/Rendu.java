@@ -1,6 +1,8 @@
-package entity;
+package simplone.example.simplonecloneui.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import simplone.example.simplonecloneui.breif.Briefs;
+import simplone.example.simplonecloneui.promotion.Promos;
 
 @Entity
 public class Rendu {

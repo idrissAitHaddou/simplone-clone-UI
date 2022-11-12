@@ -9,25 +9,34 @@
       </button>
       <div class="py-6 px-6 lg:px-8">
         <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Add Promotion</h3>
-        <form class="space-y-6" action="javascript:addExtrax()" method="post">
+        <form class="space-y-6" action="javascript:addPromotion()" method="post">
           <div class="mb-6 flex md:flex-row flex-col justify-between gap-6">
             <div class="w-full">
-              <label for="type_extra" class="block mb-2 text-sm font-medium text-grey-800 ">Name</label>
+              <label for="name" class="block mb-2 text-sm font-medium text-grey-800 ">Name</label>
               <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <input id="type_extra" name="type_extra" type="text" autocomplete="text" placeholder="Enetr name" class="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md">
+                <input id="name" name="type_extra" type="text" autocomplete="text" class="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md">
               </div>
             </div>
              <div class="w-full">
-              <label for="rate" class="block mb-2 text-sm font-medium text-grey-800 ">Select former</label>
+              <label for="formerAdd" class="block mb-2 text-sm font-medium text-grey-800 ">Select former</label>
               <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <select class="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md">
-                  <option disabled selected>Select former</option>
-                  <option>former 1</option>
-                  <option>former 2</option>
-                  <option>former 3</option>
-                  <option>former 4</option>
+                <select id="formerAdd" class="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md">
                 </select>
               </div>
+            </div>
+          </div>
+          <div class="mb-6 flex md:flex-row flex-col justify-between gap-6">
+            <div class="w-full">
+              <label for="year" class="block mb-2 text-sm font-medium text-grey-800 ">Year school</label>
+              <div class="mt-1 sm:mt-0 sm:col-span-2">
+                <input id="year" name="type_extra" type="text" autocomplete="text" class="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md">
+              </div>
+            </div>
+             <div class="w-full">
+               <label for="niveau" class="block mb-2 text-sm font-medium text-grey-800 ">Niveau</label>
+               <div class="mt-1 sm:mt-0 sm:col-span-2">
+                 <input id="niveau" name="type_extra" type="text" autocomplete="text" class="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md">
+               </div>
             </div>
           </div>
           <div class="mb-6 flex md:flex-row flex-col justify-between gap-6">

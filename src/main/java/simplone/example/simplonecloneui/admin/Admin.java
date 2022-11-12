@@ -1,6 +1,6 @@
-package simplone.example.simplonecloneui.entity;
+package simplone.example.simplonecloneui.admin;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 public class Admin {

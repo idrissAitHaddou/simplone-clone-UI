@@ -1,6 +1,6 @@
-package simplone.example.simplonecloneui.entity;
+package simplone.example.simplonecloneui.learner;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 public class Apprenants {
@@ -20,9 +20,21 @@ public class Apprenants {
     @Basic
     @Column(name = "password")
     private String password;
+
+    @Basic
+    @Column(name = "role")
+    private Integer role;
     @Basic
     @Column(name = "idpr")
     private Integer idpr;
+
+    public void setRole(int role) {
+        this.role = role;
+    }
+
+    public int getRole() {
+        return role;
+    }
 
     public int getId() {
         return id;
@@ -71,6 +83,7 @@ public class Apprenants {
     public void setIdpr(Integer idpr) {
         this.idpr = idpr;
     }
+
 
     @Override
     public boolean equals(Object o) {
