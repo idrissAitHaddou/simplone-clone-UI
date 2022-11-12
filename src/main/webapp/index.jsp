@@ -1,1 +1,3 @@
-<jsp:include page="/user/views/home/index.jsp"/>
+<%
+    response.sendRedirect("/admin/login");
+%>

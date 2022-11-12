@@ -1,6 +1,7 @@
-package simplone.example.simplonecloneui.entity;
+package simplone.example.simplonecloneui.breif;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import simplone.example.simplonecloneui.promotion.Promos;
 
 @Entity
 public class Briefs {
@@ -17,6 +18,19 @@ public class Briefs {
     @Basic
     @Column(name = "status")
     private Boolean status;
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    @Basic
+    @Column(name = "image")
+    private String image;
+
+    public String getImage() {
+        return image;
+    }
+
     @ManyToOne
     @JoinColumn(name = "idpr", referencedColumnName = "id")
     private Promos promosByIdpr;

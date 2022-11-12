@@ -1,6 +1,7 @@
-package simplone.example.simplonecloneui.entity;
+package simplone.example.simplonecloneui.former;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import simplone.example.simplonecloneui.promotion.Promos;
 
 @Entity
 public class Formateurs {
@@ -20,9 +21,20 @@ public class Formateurs {
     @Basic
     @Column(name = "password")
     private String password;
+    @Basic
+    @Column(name = "role")
+    private Integer role;
     @ManyToOne
     @JoinColumn(name = "idpr", referencedColumnName = "id")
     private Promos promosByIdpr;
+
+    public void setRole(int role) {
+        this.role = role;
+    }
+
+    public int getRole() {
+        return role;
+    }
 
     public int getId() {
         return id;
