@@ -8,6 +8,59 @@ import java.util.List;
 
 public class FormerRepository {
 
+    public static boolean changePassowrd(String password, int id) {
+        EntityManager em = Config.getConfig().getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query query = em.createQuery("UPDATE Formateurs f SET f.password = :password WHERE f.id = :id");
+            query.setParameter("password", password);
+            query.setParameter("id", id);
+            query.executeUpdate();
+            em.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
+    public static boolean checkPassword(String passowrd, int id) {
+        boolean check = false;
+        List former = null;
+        EntityManager em = Config.getConfig().getEntityManager();
+        em.getTransaction().begin();
+        Query query = em.createQuery("SELECT F FROM Formateurs F where F.id = :id and F.password = :password");
+        query.setParameter("password", passowrd);
+        query.setParameter("id", id);
+        former = query.getResultList();
+        em.getTransaction().commit();
+        em.close();
+        if(former.size() > 0) check = true;
+        return check;
+    }
+
+    public static boolean updateProfile(Formateurs formateurs) {
+        EntityManager em = Config.getConfig().getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query query = em.createQuery("UPDATE Formateurs f SET f.prenom = :prenom, f.nom = :nom, f.email = :email WHERE f.id = :id");
+            query.setParameter("prenom",formateurs.getPrenom());
+            query.setParameter("nom",formateurs.getNom());
+            query.setParameter("email",formateurs.getEmail());
+            query.setParameter("id",formateurs.getId());
+            query.executeUpdate();
+            em.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
     public static List all() {
         List users = null;
         EntityManager em = Config.getConfig().getEntityManager();
