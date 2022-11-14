@@ -19,7 +19,7 @@ public class SendEmail {
         props.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
 
         String adminEmail = "idrissaithadou@gmail.com";
-        String adminPassword = "2000@3@3driss";
+        String adminPassword = "pass";
 
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
@@ -31,6 +31,7 @@ public class SendEmail {
         try {
             Transport transport = session.getTransport("smtp");
             transport.connect("idrissaithadou@gmail.com", "gyribnelqvmglgzc");
+            // Send message
             transport.sendMessage(message, message.getAllRecipients());
             System.out.println("Sent message successfully....");
             transport.close();
@@ -46,9 +47,23 @@ public class SendEmail {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(adminEmail));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
+            // Set Subject: header field
             message.setSubject("New breif");
-            message.setSubject(name);
-            message.setText(description);
+            // Send the actual HTML message, as big as you like
+            message.setContent(
+                    "<div style=\"background-color: orange;\">\n" +
+                            "    <h1 style=\"text-align: center;color: white;padding-top: 10px;padding-bottom: 10px;\">"+name+"</h1>\n" +
+                            "    <hr style=\"margin:auto; width:50%;background-color:white;border: 1px solid white;margin-bottom: 10px;\">\n" +
+                            "    <p style=\"margin:auto;color: white;width: 80%;padding-bottom: 20px;\">\n"+ description +"\n" +
+                            "        <br>\n" +
+                            "        <br>\n" +
+                            "        <a href=\"http://localhost:8085/former/login\">http://localhost:8085/former/login</a>\n" +
+                            "    </p>\n" +
+                            "</div>",
+                    "text/html"
+            );
+//            message.setSubject(name);
+//            message.setText(description);
             return message;
         } catch (Exception ex) {
             System.out.println(" error message");

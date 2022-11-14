@@ -1,13 +1,32 @@
 package simplone.example.simplonecloneui.former;
 
+import jakarta.servlet.http.HttpServletRequest;
 import simplone.example.simplonecloneui.learner.Apprenants;
-import simplone.example.simplonecloneui.learner.LearnerRepository;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class FormerService {
+
+    public static boolean changeFormerPasswordService(String passowrd, int id) {
+        String passwordHashing = passwordHashing(passowrd);
+        return FormerRepository.changePassowrd(passwordHashing, id);
+    }
+
+    public static boolean checkFormerPasswordService(String passowrd, int id) {
+        String passwordHashing = passwordHashing(passowrd);
+        return FormerRepository.checkPassword(passwordHashing, id);
+    }
+
+    public static boolean updateFormerProfileService(HttpServletRequest request, int id) {
+        Formateurs former = new Formateurs();
+        former.setId(id);
+        former.setPrenom(request.getParameter("firstname"));
+        former.setNom(request.getParameter("lastname"));
+        former.setEmail(request.getParameter("email"));
+        return FormerRepository.updateProfile(former);
+    }
 
     public static List getAllFormersService() {
         return FormerRepository.all();

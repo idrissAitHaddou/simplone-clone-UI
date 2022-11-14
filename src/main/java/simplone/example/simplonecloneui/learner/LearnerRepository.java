@@ -3,10 +3,64 @@ package simplone.example.simplonecloneui.learner;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import simplone.example.simplonecloneui.config.Config;
+import simplone.example.simplonecloneui.former.Formateurs;
 
 import java.util.List;
 
 public class LearnerRepository {
+
+    public static boolean changePassowrd(String password, int id) {
+        EntityManager em = Config.getConfig().getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query query = em.createQuery("UPDATE Apprenants a SET a.password = :password WHERE a.id = :id");
+            query.setParameter("password", password);
+            query.setParameter("id", id);
+            query.executeUpdate();
+            em.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
+    public static boolean checkPassword(String passowrd, int id) {
+        boolean check = false;
+        List laerner = null;
+        EntityManager em = Config.getConfig().getEntityManager();
+        em.getTransaction().begin();
+        Query query = em.createQuery("SELECT A FROM Apprenants A where A.id = :id and A.password = :password");
+        query.setParameter("password", passowrd);
+        query.setParameter("id", id);
+        laerner = query.getResultList();
+        em.getTransaction().commit();
+        em.close();
+        if(laerner.size() > 0) check = true;
+        return check;
+    }
+
+    public static boolean updateProfile(Apprenants apprenants) {
+        EntityManager em = Config.getConfig().getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query query = em.createQuery("UPDATE Apprenants a SET a.prenom = :prenom, a.nom = :nom, a.email = :email WHERE a.id = :id");
+            query.setParameter("prenom",apprenants.getPrenom());
+            query.setParameter("nom",apprenants.getNom());
+            query.setParameter("email",apprenants.getEmail());
+            query.setParameter("id",apprenants.getId());
+            query.executeUpdate();
+            em.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
 
     public static List all() {
         List users = null;

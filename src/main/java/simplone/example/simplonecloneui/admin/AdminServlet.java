@@ -21,7 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 
 @WebServlet({"/admin/create-user", "/admin/update-user", "/admin/delete-user", "/admin/get-users", "/admin/get-user", "/admin/get-formers", "/admin/get-learners",
-             "/admin/create-promotion", "/admin/get-promotions", "/admin/delete-promotion", "/admin/search-promotions", "/admin/get-promotion", "/admin/update-promotion"})
+             "/admin/create-promotion", "/admin/get-promotions", "/admin/delete-promotion", "/admin/search-promotions", "/admin/get-promotion", "/admin/update-promotion",
+             "/admin/get-profile", "/admin/update-profile", "/admin/check-password-profile", "/admin/change-password-profile"})
 @MultipartConfig
 public class AdminServlet extends HttpServlet {
     public static final String IMAGES_FOLDER = "assets/images";
@@ -66,7 +67,93 @@ public class AdminServlet extends HttpServlet {
             case "/admin/delete-promotion": deletePromotionsController(request,response); break;
             case "/admin/search-promotions": searchPromotionsController(request,response); break;
             case "/admin/update-promotion": updatePromotionsController(request,response); break;
+
+            case "/admin/get-profile": getProfileUsreController(request,response); break;
+            case "/admin/update-profile": updateProfileUsreController(request,response); break;
+            case "/admin/check-password-profile": checkPasswordUsreController(request,response); break;
+            case "/admin/change-password-profile": changePasswordUsreController(request,response); break;
         }
+    }
+
+    public void changePasswordUsreController(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        boolean checkStatus = false;
+        HttpSession session = request.getSession();
+        session.setAttribute("role", "former");
+        session.setAttribute("id", 23);
+        if(session.getAttribute("role") == "former")
+            checkStatus = FormerService.changeFormerPasswordService(request.getParameter("password"), (Integer)session.getAttribute("id"));
+        else if(session.getAttribute("role") == "learner")
+            checkStatus = LearnerService.changeLearnerPasswordService(request.getParameter("password"), (Integer)session.getAttribute("id"));
+        else if(session.getAttribute("role") == "admin")
+            checkStatus = AdminService.changeAdminPasswordService(request.getParameter("password"),(Integer)session.getAttribute("id"));
+        response.setContentType("application/json");
+        HashMap<String, String> responseStatus = new HashMap<>();
+        if(checkStatus == true) responseStatus.put("status", "success");
+        else responseStatus.put("status", "error");
+        String json = new Gson().toJson(responseStatus);
+        PrintWriter out = response.getWriter();
+        out.println(json);
+        out.flush();
+    }
+
+    public void checkPasswordUsreController(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        boolean checkStatus = false;
+        HttpSession session = request.getSession();
+        session.setAttribute("role", "former");
+        session.setAttribute("id", 23);
+        if(session.getAttribute("role") == "former")
+            checkStatus = FormerService.checkFormerPasswordService(request.getParameter("password"), (Integer)session.getAttribute("id"));
+        else if(session.getAttribute("role") == "learner")
+            checkStatus = LearnerService.checkLearnerPasswordService(request.getParameter("password"), (Integer)session.getAttribute("id"));
+        else if(session.getAttribute("role") == "admin")
+            checkStatus = AdminService.checkAdminPasswordService(request.getParameter("password"),(Integer)session.getAttribute("id"));
+        response.setContentType("application/json");
+        HashMap<String, String> responseStatus = new HashMap<>();
+        if(checkStatus == true) responseStatus.put("status", "success");
+        else responseStatus.put("status", "error");
+        String json = new Gson().toJson(responseStatus);
+        PrintWriter out = response.getWriter();
+        out.println(json);
+        out.flush();
+    }
+
+    public void updateProfileUsreController(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        boolean updateStatus = false;
+        HttpSession session = request.getSession();
+        session.setAttribute("role", "former");
+        session.setAttribute("id", 23);
+        if(session.getAttribute("role") == "former")
+            updateStatus = FormerService.updateFormerProfileService(request, (Integer)session.getAttribute("id"));
+        else if(session.getAttribute("role") == "learner")
+            updateStatus = LearnerService.updateLearnerProfileService(request, (Integer)session.getAttribute("id"));
+        else if(session.getAttribute("role") == "admin")
+            updateStatus = AdminService.updateAdminService(request,(Integer)session.getAttribute("id"));
+
+        response.setContentType("application/json");
+        HashMap<String, String> responseStatus = new HashMap<>();
+        if(updateStatus == true) responseStatus.put("status", "success");
+        else responseStatus.put("status", "error");
+        String json = new Gson().toJson(responseStatus);
+        PrintWriter out = response.getWriter();
+        out.println(json);
+        out.flush();
+    }
+
+    public void getProfileUsreController(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        List user = null;
+        HttpSession session = request.getSession();
+        session.setAttribute("role", "former");
+        session.setAttribute("id", 23);
+        if(session.getAttribute("role") == "former")
+            user = FormerService.getFormerService((Integer)session.getAttribute("id"));
+        if(session.getAttribute("role") == "learner")
+            user = LearnerService.getLearnerService((Integer)session.getAttribute("id"));
+        if(session.getAttribute("role") == "admin")
+            user = AdminService.getProfileService((Integer)session.getAttribute("id"));
+        String json = new Gson().toJson(user);
+        PrintWriter out = response.getWriter();
+        out.println(json);
+        out.flush();
     }
 
     public void updatePromotionsController(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

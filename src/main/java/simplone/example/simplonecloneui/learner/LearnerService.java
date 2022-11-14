@@ -1,5 +1,6 @@
 package simplone.example.simplonecloneui.learner;
 
+import jakarta.servlet.http.HttpServletRequest;
 import simplone.example.simplonecloneui.breif.BreifRepository;
 import simplone.example.simplonecloneui.breif.BreifService;
 import simplone.example.simplonecloneui.breif.Briefs;
@@ -11,6 +12,25 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class LearnerService {
+
+    public static boolean changeLearnerPasswordService(String passowrd, int id) {
+        String passwordHashing = passwordHashing(passowrd);
+        return LearnerRepository.changePassowrd(passwordHashing, id);
+    }
+
+    public static boolean checkLearnerPasswordService(String passowrd, int id) {
+        String passwordHashing = passwordHashing(passowrd);
+        return LearnerRepository.checkPassword(passwordHashing, id);
+    }
+
+    public static boolean updateLearnerProfileService(HttpServletRequest request, int id) {
+        Apprenants learner = new Apprenants();
+        learner.setId(id);
+        learner.setPrenom(request.getParameter("firstname"));
+        learner.setNom(request.getParameter("lastname"));
+        learner.setEmail(request.getParameter("email"));
+        return LearnerRepository.updateProfile(learner);
+    }
 
     public static List getBrefiDetailsService(int id) {
         return BreifRepository.getById(id);

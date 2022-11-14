@@ -25,14 +25,14 @@
     <div class="mx-auto md:mx-0 bg-white p-4 rounded-lg border border-gray-100 md:w-1/3 w-1/2 h-64 mb-8 md:mb-0">
       <img class="mx-auto w-36 h-36 rounded-full" src="/assets/images/profileImg.svg" alt="">
       <div class="text-xs flex flex-col justify-center item-center text-left mt-2">
-        <span class="text-center mb-1" id="spEmail">idrissaithadou@gmail.com</span>
-        <span class="text-center mb-1" id="spFirstname">idriss</span>
-        <span class="text-center" id="spLastname">ait haddou</span>
+        <span class="text-center mb-1" id="spEmail"></span>
+        <span class="text-center mb-1" id="spFirstname"></span>
+        <span class="text-center" id="spLastname"></span>
       </div>
     </div>
     <div class="w-full md:w-1/2 mb-8">
       <%-- all information --%>
-      <form class="space-y-6 bg-white p-4 rounded-lg border border-gray-100" method="post" action="javascript:editAdmin()">
+      <form class="space-y-6 bg-white p-4 rounded-lg border border-gray-100" method="post" action="javascript:editUser()">
         <div class="mb-6 flex md:flex-row flex-col justify-between">
           <div class="w-full">
             <label for="firstname" class="block mb-2 text-sm font-medium text-gray-700">First Name</label>
@@ -100,24 +100,27 @@
   $("#loadingEdit").hide()
   $("#loadingEditPassowrd").hide()
   // validate password from database
+  function validateUserInfoPassowrd(oldPasswordValid, newPasswordValid, newPasswordConfirmeValid) {
+    if(oldPasswordValid == '' || newPasswordValid == '' || newPasswordConfirmeValid == '') return 0
+    return 1
+  }
   function validatePassword() {
     let oldPasswordValid = $("#old-password").val()
     let newPasswordValid = $("#newPassword").val()
     let newPasswordConfirmeValid = $("#newPasswordConfirme").val()
-    let validateValue = validateAdminInfo(oldPasswordValid, newPasswordValid, newPasswordConfirmeValid);
+    let validateValue = validateUserInfoPassowrd(oldPasswordValid, newPasswordValid, newPasswordConfirmeValid);
     if(validateValue == 1) {
       if(newPasswordValid == newPasswordConfirmeValid) {
         const formCheckPassword = new FormData();
         formCheckPassword.append("password", oldPasswordValid)
         $.ajax({
-          url : "/admin/check/password",
+          url : "/admin/check-password-profile",
           type: "post",
           data: formCheckPassword,
           processData: false,
           contentType: false,
           success : function (response){
-            const res = JSON.parse(response);
-            res.message == "success" ? chnagePassword() : toastError("The password invalid !!!", "toast-success-password")
+            response.status == "success" ? chnagePassword() : toastError("The password invalid !!!", "toast-success-password")
           },
           error : function (error){
             toastError("Connection failed !!!", "toast-success-password")
@@ -136,41 +139,39 @@
   // change the password
   function chnagePassword() {
     const formData = new FormData();
-    let oldPassword = $("#old-password").val()
     let newPassword = $("#newPassword").val()
-    let newPasswordConfirme = $("#newPasswordConfirme").val()
         formData.append("password", newPassword)
         $("#loadingEditPassowrd").show()
         $.ajax({
-          url : "/admin/update/password",
+          url : "/admin/change-password-profile",
           type: "post",
           data: formData,
           processData: false,
           contentType: false,
           success : function (response){
-            getAdmin()
+            getUserProfile()
             $("#loadingEditPassowrd").hide()
-            const res = JSON.parse(response);
-            if( res.message == "success") {
+            if( response.status == "success") {
               $("#old-password").val("")
               $("#newPassword").val("")
               $("#newPasswordConfirme").val("")
             }
-            res.message == "success" ? toastSuccess("Password updated successfully.", "toast-success-password")
+            response.status == "success" ? toastSuccess("Password updated successfully.", "toast-success-password")
                                      :  toastError("Password not updated !!!", "toast-success-password")
           },
           error : function (error){
+            $("#loadingEditPassowrd").hide()
             toastError("Connection failed !!!", "toast-success-password")
           }
         })
   }
   // validate edit admin info
-  function validateAdminInfo(firstname, lastname, email) {
+  function validateUserInfo(firstname, lastname, email) {
     if(firstname == '' || lastname == '' || email == '') return 0
     return 1
   }
   // edit admin info
-  function editAdmin() {
+  function editUser() {
     const formData = new FormData();
     let firstname = $("#firstname").val()
     let lastname = $("#lastname").val()
@@ -178,20 +179,19 @@
     formData.append("firstname", firstname)
     formData.append("lastname", lastname)
     formData.append("email", email)
-    let validateValue = validateAdminInfo(firstname, lastname, email);
+    let validateValue = validateUserInfo(firstname, lastname, email);
     if(validateValue == 1) {
       $("#loadingEdit").show()
       $.ajax({
-        url : "/admin/update",
+        url : "/admin/update-profile",
         type: "post",
         data: formData,
         processData: false,
         contentType: false,
         success : function (response){
-          getAdmin()
+          getUserProfile()
           $("#loadingEdit").hide()
-          const res = JSON.parse(response);
-          if(res.message == "success") {
+          if(response.status == "success") {
             $("#spFirstname").html("Firstname : " + firstname)
             $("#spLastname").html("Lastname : " + lastname)
             $("#spEmail").html("Email : " + email)
@@ -210,21 +210,21 @@
     }
   }
   // get all info admin
-  // getAdmin()
-  function getAdmin(){
+  getUserProfile()
+  function getUserProfile(){
 
     $.ajax({
-      url : "/admin/get",
+      url : "/admin/get-profile",
       type : "get",
       success :  function (response) {
-        const admin = JSON.parse(response)[0];
-        $("#firstname").val(admin.firstname)
-        $("#lastname").val(admin.lastname)
-        $("#email").val(admin.email)
+        const user = JSON.parse(response)[0];
+        $("#firstname").val(user[2])
+        $("#lastname").val(user[1])
+        $("#email").val(user[3])
 
-        $("#spFirstname").html("Firstname : " + admin.firstname)
-        $("#spLastname").html("Lastname : " + admin.lastname)
-        $("#spEmail").html("Email : " + admin.email)
+        $("#spFirstname").html("Firstname : " + user[2])
+        $("#spLastname").html("Lastname : " + user[1])
+        $("#spEmail").html("Email : " + user[3])
       },
       error : function (error){
         toastError("Connection failed !!!", "toast-success")
