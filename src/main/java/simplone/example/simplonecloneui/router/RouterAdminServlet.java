@@ -14,23 +14,25 @@ public class RouterAdminServlet extends HttpServlet {
         checkSession = request.getSession();
         switch(path) {
             case "/admin/logout":
-//                HttpSession removeSession = request.getSession();
-//                removeSession.removeAttribute("sessionsAdmin");
-//                response.sendRedirect("/admin/login");
-                RequestDispatcher toLogin = request.getRequestDispatcher("../app/views/login/index.jsp");
+                HttpSession removeSession = request.getSession();
+                removeSession.removeAttribute("role");
+                removeSession.removeAttribute("id");
+                response.sendRedirect("/admin/login");
+                RequestDispatcher toLogin = request.getRequestDispatcher("../app/views/loginAdmin/index.jsp");
                 toLogin.include( request, response );
                 break;
             case "/admin/login":
-//                HttpSession session = request.getSession();
-//                if(session.getAttribute("sessionsAdmin") == null) {
-                    RequestDispatcher login = request.getRequestDispatcher("../app/views/login/index.jsp");
+                HttpSession session = request.getSession();
+                if(session.getAttribute("role") != "admin") {
+                    RequestDispatcher login = request.getRequestDispatcher("../app/views/loginAdmin/index.jsp");
                     login.include( request, response );
-//                    return;
-//                }
-//                response.sendRedirect("/admin/dashboard");
+                    return;
+                }
+                response.sendRedirect("/admin/users");
                 break;
             case "/admin/dashboard":
-                view(request, response, "../app/views/dashboard/index.jsp");
+                response.sendRedirect("/admin/users");
+                view(request, response, "../app/views/users/index.jsp");
                 break;
             case "/admin/profile":
                 view(request, response, "../app/views/profile/index.jsp");
@@ -49,7 +51,7 @@ public class RouterAdminServlet extends HttpServlet {
     }
 
     public void view(HttpServletRequest request, HttpServletResponse response, String pathView) throws ServletException, IOException  {
-//        if(checkSession.getAttribute("sessionsAdmin") != null) {
+        if(checkSession.getAttribute("role") != null) {
             RequestDispatcher header = request.getRequestDispatcher("../app/component/header.jsp");
             header.include( request, response );
             RequestDispatcher sidebar = request.getRequestDispatcher("../app/component/sidebar.jsp");
@@ -58,11 +60,11 @@ public class RouterAdminServlet extends HttpServlet {
             main.include( request, response );
             RequestDispatcher footer = request.getRequestDispatcher("../app/component/footer.jsp");
             footer.include( request, response );
-//            return;
-//        }
-//        response.sendRedirect("/admin/login");
-//        RequestDispatcher login = request.getRequestDispatcher("../app/views/login/index.jsp");
-//        login.include( request, response );
+            return;
+        }
+        response.sendRedirect("/admin/login");
+        RequestDispatcher login = request.getRequestDispatcher("../app/views/loginAdmin/index.jsp");
+        login.include( request, response );
     }
 
 }

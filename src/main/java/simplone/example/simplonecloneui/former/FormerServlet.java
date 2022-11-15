@@ -17,7 +17,7 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 
-@WebServlet({"/former/get-learners", "/former/search-learners", "/fromer/delete-learner", "/former/get-learners-no-promo" ,
+@WebServlet({"/former/validate/login", "/former/get-learners", "/former/search-learners", "/fromer/delete-learner", "/former/get-learners-no-promo" ,
         "/former/add-learner-to-promo", "/former/create-breif", "/former/get-breifs", "/former/get-breif", "/former/update-breif",
         "/former/delete-breif", "/former/search-breif", "/former/launch-breif"})
 @MultipartConfig
@@ -50,6 +50,8 @@ public class FormerServlet extends HttpServlet {
     public void Mapping(HttpServletRequest request, HttpServletResponse response) throws SQLException, ParseException, IOException, ServletException {
         String path = request.getServletPath()!=null?request.getServletPath():"";
         switch(path) {
+            case "/former/validate/login": loginController(request,response); break;
+
             case "/former/get-learners": getAllLearnersController(request,response); break;
             case "/former/search-learners": searchLearnersController(request,response); break;
             case "/fromer/delete-learner": deleteLearnersController(request,response); break;
@@ -65,9 +67,22 @@ public class FormerServlet extends HttpServlet {
         }
     }
 
+    public void loginController(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        boolean checkStatus = false;
+        checkStatus = FormerService.loginService(request, request.getParameter("email"),request.getParameter("password"));
+        response.setContentType("application/json");
+        HashMap<String, String> responseStatus = new HashMap<>();
+        if(checkStatus == true) responseStatus.put("status", "success");
+        else responseStatus.put("status", "error");
+        String json = new Gson().toJson(responseStatus);
+        PrintWriter out = response.getWriter();
+        out.println(json);
+        out.flush();
+    }
+
     public void launchBreifController(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         boolean deleteStatus = false;
-        deleteStatus = BreifService.launchBriefService(Integer.parseInt(request.getParameter("id")));
+        deleteStatus = BreifService.launchBriefService(request, Integer.parseInt(request.getParameter("id")));
         response.setContentType("application/json");
         HashMap<String, String> responseStatus = new HashMap<>();
         if(deleteStatus == true) responseStatus.put("status", "success");
@@ -79,7 +94,7 @@ public class FormerServlet extends HttpServlet {
     }
 
     public void searchBreifController(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        List brief = BreifService.searchBreifService(request.getParameter("name"));
+        List brief = BreifService.searchBreifService(request, request.getParameter("name"));
         String json = new Gson().toJson(brief);
         PrintWriter out = response.getWriter();
         out.println(json);
@@ -121,7 +136,7 @@ public class FormerServlet extends HttpServlet {
     }
 
     public void getBreifsController(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        List learners = BreifService.getMyBreifsService();
+        List learners = BreifService.getMyBreifsService(request);
         String json = new Gson().toJson(learners);
         PrintWriter out = response.getWriter();
         out.println(json);
@@ -143,7 +158,7 @@ public class FormerServlet extends HttpServlet {
 
     public void addLearnerToPromoController(HttpServletRequest request, HttpServletResponse response) throws IOException {
         boolean deleteStatus = false;
-        deleteStatus = FormerService.addLearnerToPromoService(Integer.parseInt(request.getParameter("idLearner")));
+        deleteStatus = FormerService.addLearnerToPromoService(request,Integer.parseInt(request.getParameter("idLearner")));
         response.setContentType("application/json");
         HashMap<String, String> responseStatus = new HashMap<>();
         if(deleteStatus == true) responseStatus.put("status", "success");
@@ -177,7 +192,7 @@ public class FormerServlet extends HttpServlet {
     }
 
     public void searchLearnersController(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        List learners = FormerService.searchLearnersService(request.getParameter("name"));
+        List learners = FormerService.searchLearnersService(request,request.getParameter("name"));
         String json = new Gson().toJson(learners);
         PrintWriter out = response.getWriter();
         out.println(json);
@@ -185,7 +200,7 @@ public class FormerServlet extends HttpServlet {
     }
 
     public void getAllLearnersController(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        List learners = FormerService.getMyLearnersService();
+        List learners = FormerService.getMyLearnersService(request);
         String json = new Gson().toJson(learners);
         PrintWriter out = response.getWriter();
         out.println(json);

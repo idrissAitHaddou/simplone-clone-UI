@@ -1,17 +1,43 @@
 package simplone.example.simplonecloneui.learner;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import simplone.example.simplonecloneui.breif.BreifRepository;
 import simplone.example.simplonecloneui.breif.BreifService;
 import simplone.example.simplonecloneui.breif.Briefs;
-import simplone.example.simplonecloneui.former.Formateurs;
-import simplone.example.simplonecloneui.former.FormerRepository;
+import simplone.example.simplonecloneui.promotion.Promos;
+import simplone.example.simplonecloneui.promotion.PromotionService;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class LearnerService {
+
+    public static List getPromoImageService(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        List<Apprenants> learners = LearnerRepository.getOne((Integer)session.getAttribute("id"));
+        List<Promos> promotion = null;
+        for (Apprenants learner: learners) {
+            promotion = PromotionService.getPromoByIdService(learner.getIdpr());
+            break;
+        }
+        return promotion;
+    }
+
+    public static boolean loginService(HttpServletRequest request, String email, String passowrd) {
+        String passwordHashing = passwordHashing(passowrd);
+        Apprenants learner = null;
+        learner = LearnerRepository.login(email, passwordHashing);
+        if(learner != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("role", "learner");
+            session.setAttribute("email", learner.getEmail());
+            session.setAttribute("id", learner.getId());
+            return true;
+        }
+        return false;
+    }
 
     public static boolean changeLearnerPasswordService(String passowrd, int id) {
         String passwordHashing = passwordHashing(passowrd);
@@ -36,8 +62,9 @@ public class LearnerService {
         return BreifRepository.getById(id);
     }
 
-    public static List getMyBrefisService() {
-        List<Apprenants> learners = LearnerRepository.getOne(1);
+    public static List getMyBrefisService(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        List<Apprenants> learners = LearnerRepository.getOne((Integer)session.getAttribute("id"));
         List<Briefs> breifs = null;
         for (Apprenants learner: learners) {
             breifs = BreifService.getByIdPromoService(learner.getIdpr());

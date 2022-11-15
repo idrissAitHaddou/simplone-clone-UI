@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%--<% HttpSession isSession = request.getSession(); %>--%>
-<%--<% String email = isSession.getAttribute("sessionsAdmin").toString(); %>--%>
+<% HttpSession isSession = request.getSession(); %>
+<% String email = isSession.getAttribute("email").toString(); %>
 <html>
 <head>
     <title>Hotel</title>
@@ -76,7 +76,7 @@
                                     <span class="top-0 left-7 absolute  w-2.5 h-2.5 bg-green-400 border-1 border-white dark:border-gray-800 rounded-full"></span>
                                 </div>
 <%--                                <span class="text-xs"><%= email %></span>--%>
-                                <span class="text-xs">idriss@gmail.com</span>
+                                <span class="text-xs"><%= email %></span>
                             </button>
                         </div>
                         <!-- Dropdown profile -->
@@ -127,11 +127,27 @@
                                 <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/>
                             </svg>
                         </button>
-                        <a href="/admin/logout" type="button" class="inline-flex items-center relative px-2">
-                            <svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path fill="none" stroke="#9C9FA6" stroke-width="2" d="M16,4 C19.3637732,5.43018182 22,8.98935065 22,13 C22,18.6008831 17.5273457,23 12,23 C6.47265429,23 2,18.6008831 2,13 C2,8.98935065 4.63622679,5.43018182 8,4 M12,1 L12,11"/>
-                            </svg>
-                        </a>
+                            <% if(isSession.getAttribute("role").toString().equals("admin")) { %>
+                                <a href="/admin/logout" type="button" class="inline-flex items-center relative px-2">
+                                    <svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill="none" stroke="#9C9FA6" stroke-width="2" d="M16,4 C19.3637732,5.43018182 22,8.98935065 22,13 C22,18.6008831 17.5273457,23 12,23 C6.47265429,23 2,18.6008831 2,13 C2,8.98935065 4.63622679,5.43018182 8,4 M12,1 L12,11"/>
+                                    </svg>
+                                </a>
+                            <% } %>
+                            <% if(isSession.getAttribute("role").toString().equals("former")) { %>
+                            <a href="/former/logout" type="button" class="inline-flex items-center relative px-2">
+                                <svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill="none" stroke="#9C9FA6" stroke-width="2" d="M16,4 C19.3637732,5.43018182 22,8.98935065 22,13 C22,18.6008831 17.5273457,23 12,23 C6.47265429,23 2,18.6008831 2,13 C2,8.98935065 4.63622679,5.43018182 8,4 M12,1 L12,11"/>
+                                </svg>
+                            </a>
+                            <% } %>
+                            <% if(isSession.getAttribute("role").toString().equals("learner")) { %>
+                            <a href="/learner/logout" type="button" class="inline-flex items-center relative px-2">
+                                <svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill="none" stroke="#9C9FA6" stroke-width="2" d="M16,4 C19.3637732,5.43018182 22,8.98935065 22,13 C22,18.6008831 17.5273457,23 12,23 C6.47265429,23 2,18.6008831 2,13 C2,8.98935065 4.63622679,5.43018182 8,4 M12,1 L12,11"/>
+                                </svg>
+                            </a>
+                            <% } %>
                     </div>
                     <!-- end login -->
                 </nav>

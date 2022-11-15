@@ -5,10 +5,9 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
-@WebServlet({"/former/logout", "/former/login", "/former/dashboard",
+@WebServlet({"/learner/login","/learner/logout", "/former/logout", "/former/login", "/former/dashboard",
               "/fromer/profile", "/former/learners", "/former/breifs",
-              "/learner/logout", "/learner/login", "/learner/dashboard",
-              "/learner/profile", "/learner/breifs", "/learner/breifs-description"})
+              "/learner/dashboard", "/learner/profile", "/learner/breifs", "/learner/breifs-description"})
 public class RouterUserServlet extends HttpServlet {
     private HttpSession checkSession;
     @Override
@@ -16,21 +15,40 @@ public class RouterUserServlet extends HttpServlet {
         String path = request.getServletPath()!=null?request.getServletPath():"";
         checkSession = request.getSession();
         switch(path) {
-            case "/former/logout":
-//                HttpSession removeSession = request.getSession();
-//                removeSession.removeAttribute("sessionsAdmin");
-//                response.sendRedirect("/admin/login");
-                RequestDispatcher toLogin = request.getRequestDispatcher("../app/views/login/index.jsp");
+            case "/learner/logout":
+                HttpSession removeSession = request.getSession();
+                removeSession.removeAttribute("role");
+                removeSession.removeAttribute("id");
+                response.sendRedirect("/learner/login");
+                RequestDispatcher toLogin = request.getRequestDispatcher("../app/views/loginLearner/index.jsp");
                 toLogin.include( request, response );
                 break;
+            case "/learner/login":
+                HttpSession session = request.getSession();
+                if(session.getAttribute("role") != "learner") {
+                    RequestDispatcher login = request.getRequestDispatcher("../app/views/loginLearner/index.jsp");
+                    login.include( request, response );
+                    return;
+                }
+                response.sendRedirect("/learner/dashboard");
+                break;
+
+            case "/former/logout":
+                HttpSession formerSession = request.getSession();
+                formerSession.removeAttribute("role");
+                formerSession.removeAttribute("id");
+                response.sendRedirect("/former/login");
+                RequestDispatcher formerLogin = request.getRequestDispatcher("../app/views/loginFormer/index.jsp");
+                formerLogin.include( request, response );
+                break;
             case "/former/login":
-//                HttpSession session = request.getSession();
-//                if(session.getAttribute("sessionsAdmin") == null) {
-                RequestDispatcher login = request.getRequestDispatcher("../app/views/login/index.jsp");
-                login.include( request, response );
-//                    return;
-//                }
-//                response.sendRedirect("/admin/dashboard");
+                HttpSession formersession = request.getSession();
+                if(formersession.getAttribute("role") != "former") {
+                    RequestDispatcher login = request.getRequestDispatcher("../app/views/loginFormer/index.jsp");
+                    login.include( request, response );
+                    return;
+                }
+                response.sendRedirect("/former/learners");
                 break;
             case "/former/dashboard":
                 view(request, response, "../app/views/dashboard/index.jsp");
@@ -54,17 +72,15 @@ public class RouterUserServlet extends HttpServlet {
                 view(request, response, "../app/views/leanerBreif/index.jsp");
                 break;
             case "/learner/breifs-description":
-                HttpSession session = request.getSession();
-                session.setAttribute("idBreif", Integer.parseInt(request.getParameter("id")));
-                System.out.println("------- id breif -------------");
-                System.out.println(session.getAttribute("idBreif"));
+                HttpSession isSession = request.getSession();
+                isSession.setAttribute("idBreif", Integer.parseInt(request.getParameter("id")));
                 view(request, response, "../app/views/breifDescription/index.jsp");
                 break;
         }
     }
 
     public void view(HttpServletRequest request, HttpServletResponse response, String pathView) throws ServletException, IOException  {
-//        if(checkSession.getAttribute("sessionsAdmin") != null) {
+        if(checkSession.getAttribute("role") != null) {
         RequestDispatcher header = request.getRequestDispatcher("../app/component/header.jsp");
         header.include( request, response );
         RequestDispatcher sidebar = request.getRequestDispatcher("../app/component/sidebar.jsp");
@@ -73,10 +89,10 @@ public class RouterUserServlet extends HttpServlet {
         main.include( request, response );
         RequestDispatcher footer = request.getRequestDispatcher("../app/component/footer.jsp");
         footer.include( request, response );
-//            return;
-//        }
-//        response.sendRedirect("/admin/login");
-//        RequestDispatcher login = request.getRequestDispatcher("../app/views/login/index.jsp");
-//        login.include( request, response );
+        return;
+        }
+        response.sendRedirect("/learner/login");
+        RequestDispatcher login = request.getRequestDispatcher("../app/views/loginLearner/index.jsp");
+        login.include( request, response );
     }
 }

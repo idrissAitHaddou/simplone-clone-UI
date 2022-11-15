@@ -1,6 +1,9 @@
 package simplone.example.simplonecloneui.former;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import simplone.example.simplonecloneui.admin.Admin;
+import simplone.example.simplonecloneui.admin.AdminRepository;
 import simplone.example.simplonecloneui.learner.Apprenants;
 
 import java.security.MessageDigest;
@@ -8,6 +11,20 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class FormerService {
+
+    public static boolean loginService(HttpServletRequest request, String email, String passowrd) {
+        String passwordHashing = passwordHashing(passowrd);
+        Formateurs former = null;
+        former = FormerRepository.login(email, passwordHashing);
+        if(former != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("role", "former");
+            session.setAttribute("email", former.getEmail());
+            session.setAttribute("id", former.getId());
+            return true;
+        }
+        return false;
+    }
 
     public static boolean changeFormerPasswordService(String passowrd, int id) {
         String passwordHashing = passwordHashing(passowrd);
@@ -40,16 +57,18 @@ public class FormerService {
         return FormerRepository.deleteMyLearner(id);
     }
 
-    public static boolean addLearnerToPromoService(int id) {
-        List<Formateurs> formers = FormerRepository.getOne(25);
+    public static boolean addLearnerToPromoService(HttpServletRequest request, int id) {
+        HttpSession session = request.getSession();
+        List<Formateurs> formers = FormerRepository.getOne((Integer) session.getAttribute("id"));
         for (Formateurs former: formers) {
             return FormerRepository.addLearnerToPromo(former.getPromosByIdpr().getId(), id);
         }
         return false;
     }
 
-    public static List searchLearnersService(String name) {
-        List<Formateurs> formers = FormerRepository.getOne(25);
+    public static List searchLearnersService(HttpServletRequest request, String name) {
+        HttpSession session = request.getSession();
+        List<Formateurs> formers = FormerRepository.getOne((Integer) session.getAttribute("id"));
         List<Apprenants> learners = null;
         for (Formateurs former: formers) {
             learners = FormerRepository.findMyLearners(former.getPromosByIdpr().getId(), name);
@@ -59,8 +78,9 @@ public class FormerService {
         return learners;
     }
 
-    public static List launchBreifToLearnersService() {
-        List<Formateurs> formers = FormerRepository.getOne(25);
+    public static List launchBreifToLearnersService(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        List<Formateurs> formers = FormerRepository.getOne((Integer)session.getAttribute("id"));
         List<Apprenants> learners = null;
         for (Formateurs former: formers) {
             learners = FormerRepository.launchBreifToLearners(former.getPromosByIdpr().getId());
@@ -69,8 +89,9 @@ public class FormerService {
         return learners;
     }
 
-    public static List getMyLearnersService() {
-        List<Formateurs> formers = FormerRepository.getOne(25);
+    public static List getMyLearnersService(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        List<Formateurs> formers = FormerRepository.getOne((Integer) session.getAttribute("id"));
         List<Apprenants> learners = null;
         for (Formateurs former: formers) {
             learners = FormerRepository.allMyLearners(former.getPromosByIdpr().getId());

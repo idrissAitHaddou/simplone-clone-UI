@@ -1,13 +1,27 @@
 package simplone.example.simplonecloneui.admin;
 
 import jakarta.servlet.http.HttpServletRequest;
-import simplone.example.simplonecloneui.learner.LearnerRepository;
+import jakarta.servlet.http.HttpSession;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class AdminService {
+
+    public static boolean loginService(HttpServletRequest request, String email, String passowrd) {
+        String passwordHashing = passwordHashing(passowrd);
+        Admin admin = null;
+        admin = AdminRepository.login(email, passwordHashing);
+        if(admin != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("role", "admin");
+            session.setAttribute("email", admin.getEmail());
+            session.setAttribute("id", admin.getId());
+            return true;
+        }
+        return false;
+    }
 
     public static boolean changeAdminPasswordService(String passowrd, int id) {
         String passwordHashing = passwordHashing(passowrd);

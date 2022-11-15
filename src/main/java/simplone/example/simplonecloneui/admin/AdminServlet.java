@@ -20,7 +20,7 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 
-@WebServlet({"/admin/create-user", "/admin/update-user", "/admin/delete-user", "/admin/get-users", "/admin/get-user", "/admin/get-formers", "/admin/get-learners",
+@WebServlet({"/admin/validate/login", "/admin/create-user", "/admin/update-user", "/admin/delete-user", "/admin/get-users", "/admin/get-user", "/admin/get-formers", "/admin/get-learners",
              "/admin/create-promotion", "/admin/get-promotions", "/admin/delete-promotion", "/admin/search-promotions", "/admin/get-promotion", "/admin/update-promotion",
              "/admin/get-profile", "/admin/update-profile", "/admin/check-password-profile", "/admin/change-password-profile"})
 @MultipartConfig
@@ -53,6 +53,8 @@ public class AdminServlet extends HttpServlet {
     public void Mapping(HttpServletRequest request, HttpServletResponse response) throws SQLException, ParseException, IOException, ServletException {
         String path = request.getServletPath()!=null?request.getServletPath():"";
         switch(path) {
+            case "/admin/validate/login": loginController(request,response); break;
+
             case "/admin/get-users": getAllUsersController(request,response); break;
             case "/admin/get-user": getUserController(request,response); break;
             case "/admin/get-formers": getAllFormesController(request,response); break;
@@ -75,11 +77,22 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
+    public void loginController(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        boolean checkStatus = false;
+        checkStatus = AdminService.loginService(request, request.getParameter("email"),request.getParameter("password"));
+        response.setContentType("application/json");
+        HashMap<String, String> responseStatus = new HashMap<>();
+        if(checkStatus == true) responseStatus.put("status", "success");
+        else responseStatus.put("status", "error");
+        String json = new Gson().toJson(responseStatus);
+        PrintWriter out = response.getWriter();
+        out.println(json);
+        out.flush();
+    }
+
     public void changePasswordUsreController(HttpServletRequest request, HttpServletResponse response) throws IOException {
         boolean checkStatus = false;
         HttpSession session = request.getSession();
-        session.setAttribute("role", "former");
-        session.setAttribute("id", 23);
         if(session.getAttribute("role") == "former")
             checkStatus = FormerService.changeFormerPasswordService(request.getParameter("password"), (Integer)session.getAttribute("id"));
         else if(session.getAttribute("role") == "learner")
@@ -99,8 +112,6 @@ public class AdminServlet extends HttpServlet {
     public void checkPasswordUsreController(HttpServletRequest request, HttpServletResponse response) throws IOException {
         boolean checkStatus = false;
         HttpSession session = request.getSession();
-        session.setAttribute("role", "former");
-        session.setAttribute("id", 23);
         if(session.getAttribute("role") == "former")
             checkStatus = FormerService.checkFormerPasswordService(request.getParameter("password"), (Integer)session.getAttribute("id"));
         else if(session.getAttribute("role") == "learner")
@@ -120,8 +131,6 @@ public class AdminServlet extends HttpServlet {
     public void updateProfileUsreController(HttpServletRequest request, HttpServletResponse response) throws IOException {
         boolean updateStatus = false;
         HttpSession session = request.getSession();
-        session.setAttribute("role", "former");
-        session.setAttribute("id", 23);
         if(session.getAttribute("role") == "former")
             updateStatus = FormerService.updateFormerProfileService(request, (Integer)session.getAttribute("id"));
         else if(session.getAttribute("role") == "learner")
@@ -142,8 +151,6 @@ public class AdminServlet extends HttpServlet {
     public void getProfileUsreController(HttpServletRequest request, HttpServletResponse response) throws IOException {
         List user = null;
         HttpSession session = request.getSession();
-        session.setAttribute("role", "former");
-        session.setAttribute("id", 23);
         if(session.getAttribute("role") == "former")
             user = FormerService.getFormerService((Integer)session.getAttribute("id"));
         if(session.getAttribute("role") == "learner")
