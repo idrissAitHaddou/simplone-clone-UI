@@ -19,7 +19,7 @@ public class SendEmail {
         props.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
 
         String adminEmail = "idrissaithadou@gmail.com";
-        String adminPassword = "pass";
+        String adminPassword = "gthhrpjrawrvompu";
 
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
@@ -30,7 +30,7 @@ public class SendEmail {
         Message message = prepareMessage(session, adminEmail, recipient, name, description);
         try {
             Transport transport = session.getTransport("smtp");
-            transport.connect("idrissaithadou@gmail.com", "gyribnelqvmglgzc");
+            transport.connect("idrissaithadou@gmail.com", "gthhrpjrawrvompu");
             // Send message
             transport.sendMessage(message, message.getAllRecipients());
             System.out.println("Sent message successfully....");
@@ -62,8 +62,6 @@ public class SendEmail {
                             "</div>",
                     "text/html"
             );
-//            message.setSubject(name);
-//            message.setText(description);
             return message;
         } catch (Exception ex) {
             System.out.println(" error message");

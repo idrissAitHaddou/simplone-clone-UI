@@ -14,7 +14,7 @@ public class BreifRepository {
         List breifs = null;
         EntityManager em = Config.getConfig().getEntityManager();
         em.getTransaction().begin();
-        Query query = em.createQuery("SELECT B.id, B.nom, B.description, B.status, B.image FROM Briefs B where B.promosByIdpr.id = :id");
+        Query query = em.createQuery("SELECT B.id, B.nom, B.description, B.status, B.image FROM Briefs B where B.promosByIdpr.id = :id and B.status = true ");
         query.setParameter("id", id);
         breifs = query.getResultList();
         em.getTransaction().commit();

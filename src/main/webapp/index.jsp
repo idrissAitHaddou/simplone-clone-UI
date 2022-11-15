@@ -1,3 +1,3 @@
 <%
-    response.sendRedirect("/admin/login");
+    response.sendRedirect("/learner/login");
 %>

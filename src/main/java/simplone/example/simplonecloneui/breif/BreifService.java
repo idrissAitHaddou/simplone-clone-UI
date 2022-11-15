@@ -2,6 +2,7 @@ package simplone.example.simplonecloneui.breif;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import simplone.example.simplonecloneui.former.Formateurs;
 import simplone.example.simplonecloneui.former.FormerRepository;
@@ -20,7 +21,7 @@ public class BreifService {
         return BreifRepository.getByIdPromo(id);
     }
 
-    public static boolean launchBriefService(int id) {
+    public static boolean launchBriefService(HttpServletRequest request, int id) {
        try {
            List<Briefs> breifs = BreifRepository.getOne(id);
            boolean status = false;
@@ -39,14 +40,8 @@ public class BreifService {
            }
 
            if(status == true) {
-               System.out.println("----------------");
-               System.out.println(status);
-               System.out.println(name);
-               System.out.println(description);
-               List<Apprenants> learners = FormerService.launchBreifToLearnersService();
-               System.out.println(learners.toString());
+               List<Apprenants> learners = FormerService.launchBreifToLearnersService(request);
                for (Apprenants learner: learners) {
-                   System.out.println(learner.getEmail());
                    SendEmail.sendEmail(learner.getEmail(), name, description);
                }
            }
@@ -56,8 +51,9 @@ public class BreifService {
        }
     }
 
-    public static List searchBreifService(String name) {
-        List<Formateurs> formers = FormerRepository.getOne(25);
+    public static List searchBreifService(HttpServletRequest request, String name) {
+        HttpSession session = request.getSession();
+        List<Formateurs> formers = FormerRepository.getOne((Integer)session.getAttribute("id"));
         for (Formateurs fromer: formers) {
             return BreifRepository.findBreifs(fromer.getPromosByIdpr().getId(), name);
         }
@@ -76,8 +72,9 @@ public class BreifService {
         return BreifRepository.delete(id);
     }
 
-    public static List getMyBreifsService() {
-        List<Formateurs> formers = FormerRepository.getOne(25);
+    public static List getMyBreifsService(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        List<Formateurs> formers = FormerRepository.getOne((Integer)session.getAttribute("id"));
         for (Formateurs fromer: formers) {
             return BreifRepository.allMyBreifs(fromer.getPromosByIdpr().getId());
         }
@@ -107,7 +104,8 @@ public class BreifService {
                 File file2 = new File(newFileName);
                 file1.renameTo(file2);
             }
-            List<Formateurs> formers = FormerRepository.getOne(25);
+            HttpSession session = request.getSession();
+            List<Formateurs> formers = FormerRepository.getOne((Integer)session.getAttribute("id"));
             for (Formateurs former: formers) {
                 Promos promo = new Promos();
                 Briefs briefs = new Briefs();
@@ -154,8 +152,8 @@ public class BreifService {
                 File file2 = new File(newFileName);
                 file1.renameTo(file2);
             }
-
-            List<Formateurs> formers = FormerRepository.getOne(25);
+            HttpSession session = request.getSession();
+            List<Formateurs> formers = FormerRepository.getOne(Integer.parseInt(request.getParameter("id")));
             for (Formateurs former: formers) {
                 Promos promo = new Promos();
                 Briefs briefs = new Briefs();

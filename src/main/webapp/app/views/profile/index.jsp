@@ -64,7 +64,7 @@
           <div id="toast-success-password" class="absolute z-[999999] right-2 -top-2 flex items-center p-4 mb-4 w-full max-w-xs text-gray-500 rounded-lg shadow" role="alert"></div>
           <div class="mb-6 flex md:flex-row flex-col justify-between">
             <div class="w-full">
-              <label for="old-password" class="block mb-2 text-sm font-medium text-gray-700">Old password ( password is : 123 )</label>
+              <label for="old-password" class="block mb-2 text-sm font-medium text-gray-700">Old password</label>
               <input type="text" id="old-password" class="w-full bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-700 rounded-lg">
             </div>
           </div>

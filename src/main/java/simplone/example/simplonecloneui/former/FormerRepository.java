@@ -2,11 +2,36 @@ package simplone.example.simplonecloneui.former;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import simplone.example.simplonecloneui.admin.Admin;
 import simplone.example.simplonecloneui.config.Config;
 
 import java.util.List;
 
 public class FormerRepository {
+
+    public static Formateurs login(String email, String passowrd) {
+        try{
+            List<Formateurs> result = null;
+            Formateurs former = null;
+            EntityManager em = Config.getConfig().getEntityManager();
+            em.getTransaction().begin();
+            Query query = em.createQuery("SELECT F FROM Formateurs F where F.email = :email and F.password = :password");
+            query.setParameter("password", passowrd);
+            query.setParameter("email", email);
+            result = query.getResultList();
+            em.getTransaction().commit();
+            em.close();
+            if(result.size() > 0) {
+                for (Formateurs res: result) {
+                    former = res;break;
+                }
+            }
+            return former;
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 
     public static boolean changePassowrd(String password, int id) {
         EntityManager em = Config.getConfig().getEntityManager();

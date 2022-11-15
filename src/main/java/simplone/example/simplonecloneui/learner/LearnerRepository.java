@@ -9,6 +9,30 @@ import java.util.List;
 
 public class LearnerRepository {
 
+    public static Apprenants login(String email, String passowrd) {
+        try{
+            List<Apprenants> result = null;
+            Apprenants learner = null;
+            EntityManager em = Config.getConfig().getEntityManager();
+            em.getTransaction().begin();
+            Query query = em.createQuery("SELECT A FROM Apprenants A where A.email = :email and A.password = :password");
+            query.setParameter("password", passowrd);
+            query.setParameter("email", email);
+            result = query.getResultList();
+            em.getTransaction().commit();
+            em.close();
+            if(result.size() > 0) {
+                for (Apprenants res: result) {
+                    learner = res;break;
+                }
+            }
+            return learner;
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
     public static boolean changePassowrd(String password, int id) {
         EntityManager em = Config.getConfig().getEntityManager();
         try {

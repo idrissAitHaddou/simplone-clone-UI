@@ -12,6 +12,10 @@ import java.util.List;
 
 public class PromotionService {
 
+    public static List getPromoByIdService(int id) {
+        return PromotionRepository.getDetails(id);
+    }
+
     public static List getAllPromotionsService() {
         return PromotionRepository.all();
     }

@@ -153,23 +153,21 @@
                 const formCheckPassword = new FormData();
                 formCheckPassword.append("password", password)
                 formCheckPassword.append("email", email)
-                window.location = "http://localhost:8085/admin/dashboard"
-                // $.ajax({
-                //     url : "/admin/validate/login",
-                //     type: "post",
-                //     data: formCheckPassword,
-                //     processData: false,
-                //     contentType: false,
-                //     success : function (response){
-                //         const res = JSON.parse(response);
-                //         $("#loadingValidateLogin").hide()
-                //         res.message == "success" ? window.location = "http://localhost:8081/admin/dashboard" : toastError("Password or Email not invalid !!!", "toast-success")
-                //     },
-                //     error : function (error){
-                //         $("#loadingValidateLogin").hide()
-                //         toastError("Connection failed !!!", "toast-success")
-                //     }
-                // })
+                $.ajax({
+                    url : "/former/validate/login",
+                    type: "post",
+                    data: formCheckPassword,
+                    processData: false,
+                    contentType: false,
+                    success : function (response){
+                        $("#loadingValidateLogin").hide()
+                        response.status == "success" ? window.location = "http://localhost:8085/former/learners" : toastError("Password or Email not invalid !!!", "toast-success")
+                    },
+                    error : function (error){
+                        $("#loadingValidateLogin").hide()
+                        toastError("Connection failed !!!", "toast-success")
+                    }
+                })
         } else {
             toastError("All informations required.", "toast-success")
         }
