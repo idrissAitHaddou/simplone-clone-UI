@@ -13,7 +13,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class LearnerService {
-
     public static List getPromoImageService(HttpServletRequest request) {
         HttpSession session = request.getSession();
         List<Apprenants> learners = LearnerRepository.getOne((Integer)session.getAttribute("id"));

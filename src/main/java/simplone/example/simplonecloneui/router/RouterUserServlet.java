@@ -5,7 +5,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
-@WebServlet({"/learner/login","/learner/logout", "/former/logout", "/former/login", "/former/dashboard",
+@WebServlet({"/email/new-password", "/email/enter-password", "/email/reset-password", "/learner/login","/learner/logout", "/former/logout", "/former/login", "/former/dashboard",
               "/fromer/profile", "/former/learners", "/former/breifs",
               "/learner/dashboard", "/learner/profile", "/learner/breifs", "/learner/breifs-description"})
 public class RouterUserServlet extends HttpServlet {
@@ -75,6 +75,21 @@ public class RouterUserServlet extends HttpServlet {
                 HttpSession isSession = request.getSession();
                 isSession.setAttribute("idBreif", Integer.parseInt(request.getParameter("id")));
                 view(request, response, "../app/views/breifDescription/index.jsp");
+                break;
+            case "/email/reset-password":
+                HttpSession sessionRole = request.getSession();
+                if(sessionRole.getAttribute("roleResetPassword") != null) sessionRole.removeAttribute("roleResetPassword");
+                sessionRole.setAttribute("roleResetPassword", request.getParameter("role"));
+                RequestDispatcher resetPassword = request.getRequestDispatcher("../app/views/resetPassword/getEmail.jsp");
+                resetPassword.include( request, response );
+                break;
+            case "/email/enter-password":
+                RequestDispatcher enterPassword = request.getRequestDispatcher("../app/views/resetPassword/enterCodeGenerate.jsp");
+                enterPassword.include( request, response );
+                break;
+            case "/email/new-password":
+                RequestDispatcher newPassword = request.getRequestDispatcher("../app/views/resetPassword/newPassword.jsp");
+                newPassword.include( request, response );
                 break;
         }
     }

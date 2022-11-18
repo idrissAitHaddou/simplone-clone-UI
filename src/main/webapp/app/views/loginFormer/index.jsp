@@ -45,14 +45,15 @@
         <div class="flex flex-col overflow-hidden bg-white rounded-md shadow-lg max md:flex-row md:flex-1 lg:max-w-screen-md">
             <div class="p-4 py-6 text-white bg-[#14BDEE] md:w-80 md:flex-shrink-0 md:flex md:flex-col md:items-center md:justify-evenly">
                 <div class="my-3 text-4xl font-bold tracking-wider text-center">
-                    <a href="#">Hotel - IDMA</a>
+                    <a href="#">Simplone</a>
                 </div>
-                <p class="mt-6 font-normal text-center text-gray-300 md:mt-0">
-                    Garantie de prix sur les hôtels les mieux notés. Réservez vite pour faire des économies ! Choisissez des
-                    hôtels avec annulation gratuite pour être remboursé si vos plans changent.
+                <p class="mt-6 font-normal text-left text-white md:mt-0">
+                    Simplon.co est une start-up active dans la formation professionnelle,
+                    dont le siège social se situe à Montreuil, et propose des formations aux
+                    métiers du numérique dans toute la France et à l'international.
                 </p>
-                <p class="mt-6 text-sm text-center text-gray-300">
-                    Your welcome in Hotel - IDMA
+                <p class="mt-6 text-sm text-center text-white">
+                    Your welcome in Simplone
                 </p>
             </div>
             <div class="p-5 bg-white md:flex-1">
@@ -70,7 +71,7 @@
                     <div class="flex flex-col space-y-1">
                         <div class="flex items-center justify-between">
                             <label for="password" class="text-sm font-semibold text-gray-500">Password</label>
-                            <a href="#" class="text-sm text-[#14BDEE] hover:underline focus:text-[#14BDEE]">Forgot Password?</a>
+                            <a href="/email/reset-password?role=former" class="text-sm text-[#14BDEE] hover:underline focus:text-[#14BDEE]">Forgot Password?</a>
                         </div>
                         <input
                                 type="password"
